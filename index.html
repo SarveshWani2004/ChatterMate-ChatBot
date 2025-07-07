@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatterMate ~made by Sarvesh Wani</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>ChatterMate</h1>
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+        <p class="credit">~made by Sarvesh Wani</p>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById("user-input");
+            const chatBox = document.getElementById("chat-box");
+
+            let userText = userInput.value;
+            chatBox.innerHTML += `<div class="user">You: ${userText}</div>`;
+
+            fetch(`/get?msg=${userText}`)
+                .then(response => response.json())
+                .then(data => {
+                    chatBox.innerHTML += `<div class="bot">ChatterMate: ${data.response}</div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                });
+
+            userInput.value = "";
+        }
+    </script>
+</body>
+</html>
